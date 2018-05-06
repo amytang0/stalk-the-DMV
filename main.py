@@ -19,7 +19,7 @@ class App:
             self.logger.log("Is daytime, start run_once")
             self.run_once()
             self.logger.log("End run_once")
-            time.sleep(900)
+            time.sleep(60)
         else:
             self.logger.log("Is night, going to sleep")
             self._sleep_till_morning()

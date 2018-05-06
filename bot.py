@@ -1,5 +1,5 @@
 from creds import SLACK_TOKEN
-from settings import SLACK_CHANNEL, URL
+from settings import SLACK_CHANNEL, URL, PROFILE 
 from slackclient import SlackClient
 from datetime import datetime
 from logger import Logger
@@ -16,9 +16,9 @@ class Bot:
         appt_month = datetime.strptime(appt_date + ' ' + appt_time.split(' ')[0], "%B %d %Y")
         tdelta = (appt_month - datetime.now()).days
 
-        if tdelta <= 14:
+        if tdelta <= 10: #change back to 14 for true month
             self.logger.log("Appointment found for current month")
-            msg = "*********************\n" + "<@U1YUJ2FBR> <@U1XU0UF7B>\n" + msg + "\n====================="
+            msg = "*********************\n" + "<@U1YUJ2FBR> <@U1XU0UF7B>\n" + msg + "\n=====================" +"\n https://www.dmv.ca.gov/wasapp/foa/findOfficeVisit.do <@amy> <!channel> <!here> " + PROFILE.last_name
         self.sc.api_call(
             "chat.postMessage",
             channel = SLACK_CHANNEL,
@@ -26,6 +26,14 @@ class Bot:
             username = 'DMV-bot',
             icon_emoji = ':robot_face:')
         self.logger.log("Message sent to %s: %s" % (SLACK_CHANNEL, msg.replace('\n',' ').replace('=','').replace('*','')))
+
+    def hi(self):
+             self.sc.api_call(
+               "chat.postMessage",
+               channel = SLACK_CHANNEL,
+               text = "hi",
+               username = 'DMV-bot',
+               icon_emoji = ':robot_face:')
 
     def listen(self):
         if self.sc.rtm_connect():
